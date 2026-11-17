@@ -1,0 +1,9 @@
+{
+  "name": "fitplace-workspace",
+  "private": true,
+  "packageManager": "pnpm@9.15.3",
+  "scripts": {
+    "dev": "pnpm --filter fitplace dev",
+    "check:all": "pnpm --filter fitplace check:all"
+  }
+}

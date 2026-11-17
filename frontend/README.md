@@ -3,6 +3,10 @@
 See the [repository README](../README.md) for installation, environment variables,
 mock API, Git hooks and architecture.
 
+Install dependencies from the repository root with
+`pnpm install --frozen-lockfile`. The workspace shares one root lockfile;
+there is no separate frontend lockfile.
+
 Commands from this directory:
 
 ```bash

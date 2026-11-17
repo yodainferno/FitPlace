@@ -6,21 +6,21 @@ published places backed by a local mock API. Map discovery is the next feature.
 
 ## Requirements
 
-- Node.js 22.12 or newer; use an LTS release.
-- pnpm 9.15.3, matching `frontend/package.json`.
+- Node.js 22.22.2, matching `.nvmrc`.
+- pnpm 9.15.3, matching the root `package.json`.
 - Git, required for installing local commit hooks.
 
-The repository currently contains one standalone application in `frontend/`.
-There is no pnpm workspace or root `package.json` yet. All commands below run
-from the repository root and use `-C frontend` to select the application.
-
-The root `.nvmrc` is currently empty. It does not select a Node.js version until
-a version is added. This environment setup does not change that file.
+The repository is a pnpm workspace with one application in `frontend/`.
+`pnpm-workspace.yaml` lists its packages, and the root `pnpm-lock.yaml` records
+their exact dependency versions. Install dependencies from the repository root.
+The root package is named `fitplace-workspace`; the frontend package is named
+`fitplace`, so `--filter fitplace` selects the frontend.
 
 ## Installation
 
 ```bash
-pnpm -C frontend install --frozen-lockfile
+nvm use
+pnpm install --frozen-lockfile
 cp -n frontend/.env.example frontend/.env.local
 ```
 
@@ -45,7 +45,7 @@ The API listens on `http://localhost:8000`. Its data is stored in
 Start Next.js in another terminal:
 
 ```bash
-pnpm -C frontend dev
+pnpm dev
 ```
 
 Open `http://localhost:3000` for the rating demo or
@@ -70,7 +70,7 @@ non-secret examples and placeholders in committed templates.
 ## Checks
 
 ```bash
-pnpm -C frontend check:all
+pnpm check:all
 ```
 
 | Command            | Purpose                                                                      |
@@ -83,7 +83,8 @@ pnpm -C frontend check:all
 | `check:ts`         | Generate Next.js route types and run TypeScript without emitting JavaScript. |
 | `check:all`        | Run formatting, ESLint, FSD and TypeScript checks in order.                  |
 
-Run any listed command as `pnpm -C frontend <command>`. Fix commands modify
+The root `dev` and `check:all` scripts forward to the frontend package. Run any
+individual check as `pnpm -C frontend <command>`. Fix commands modify
 files, so review their diff before staging. The aggregate check never runs a
 production build and stops at the first failing check.
 
