@@ -28,7 +28,7 @@ Installation runs `prepare` and configures Husky for this repository. To install
 the hooks again without reinstalling dependencies:
 
 ```bash
-pnpm -C frontend prepare
+pnpm prepare
 ```
 
 ## Development
@@ -98,6 +98,7 @@ editor to use the same formatting on save.
 
 ## Git Hooks and Commit Messages
 
+- Hooks live in the root `.husky/`; the root package owns Husky and commitlint.
 - `pre-commit` runs the complete `check:all`, not just checks on staged files.
 - `commit-msg` validates the message with commitlint and Conventional Commits.
 - Neither hook automatically fixes or stages files.
@@ -123,6 +124,10 @@ protected branches. A GitHub Actions workflow is not configured yet.
 ## Structure
 
 ```text
+.husky/                   Repository-wide commit checks
+commitlint.config.mjs     Conventional Commits configuration
+pnpm-workspace.yaml       Workspace package list
+pnpm-lock.yaml            Shared dependency lockfile
 frontend/
   src/
     app/                  Next.js routes, layouts and special files
@@ -131,7 +136,6 @@ frontend/
     entities/             Domain types, schemas and entity UI
     shared/               Reusable UI, types and utilities
   json-server/            Local mock API and demonstration data
-  .husky/                 Commit checks
 ```
 
 Imports from another slice go through its public `index.ts`. Existing aliases
