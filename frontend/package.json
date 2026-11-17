@@ -7,7 +7,7 @@
     "build": "next build",
     "start": "next start",
     "lint": "eslint",
-    "fsd:check": "steiger ./src",
+    "check:fsd": "steiger ./src",
     "start:mock-server": "node ./json-server/index.js"
   },
   "dependencies": {

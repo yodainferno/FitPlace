@@ -1,7 +1,6 @@
 import axios from 'axios';
-import {type LoadState, ErrorState, createSuccessState} from "@/src/shared/model/load-state";
-import {Place} from "@/src/entities/place";
-import {checkPublishedPlacesSchema} from "@/src/entities/place/model/types/placeSchema";
+import {type LoadState, ErrorState, createSuccessState} from "@/src/shared/model";
+import {checkPublishedPlacesSchema, type Place} from "@/src/entities/place";
 
 
 export async function getAllPlaces(): Promise<LoadState<Place[]>>  {

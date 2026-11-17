@@ -1,4 +1,4 @@
-import PlacesExplorer from "@/src/widgets/places-explorer/ui/PlacesExplorer";
+import {PlacesExplorer} from "@/src/widgets/places-explorer";
 
 export default function PlacesPage() {
   return (

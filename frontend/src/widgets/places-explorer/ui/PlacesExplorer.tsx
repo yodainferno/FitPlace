@@ -3,7 +3,7 @@
 import React, {useEffect, useState} from 'react';
 import {getAllPlaces} from "../api/getAllPublishedPlaces";
 import {type Place, PlaceCard} from "@/src/entities/place";
-import {LoadingState, type LoadState} from "@/src/shared/model/load-state";
+import {LoadingState, type LoadState} from "@/src/shared/model";
 
 const PlacesExplorer = () => {
     const [places, setPlaces] = useState<LoadState<Place[]>>(LoadingState);
