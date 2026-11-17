@@ -1,11 +1,6 @@
-'use client'
-
-import {useState} from "react";
-import {Rate} from "@/src/shared/ui/Rate";
+import {Rate} from '@/src/shared/ui/Rate';
 
 export default function Home() {
-  const [rate, setRate] = useState<number>(0);
-
   const srLabelGenerator = (value: number | null): string => {
       switch (value) {
           case null:
@@ -25,11 +20,10 @@ export default function Home() {
   return (
     <div>
       <Rate
-        value={rate}
+        value={2}
         maxValue={3}
-        onChange={(_r) => setRate(_r)}
         srLabel={srLabelGenerator}
-        readOnly={false}
+        editable
         srLegendLabel="Оценка места"
       />
     </div>

@@ -1,0 +1,107 @@
+{
+  "places": [
+    {
+      "id": "place-1",
+      "user_id": "user-1",
+      "publishState": { "status": "PUBLISHED" },
+      "category": "workout",
+      "name": "Лесная площадка с турниками",
+      "about": {
+        "description": "Небольшая площадка среди деревьев: турники разной высоты и брусья. Подойдёт для спокойной тренировки без очередей.",
+        "workingHours": "Круглосуточно"
+      },
+      "location": {
+        "latitude": 55.795,
+        "longitude": 37.678,
+        "address": "Москва, парк Сокольники (демо-точка)"
+      },
+      "rate": 0
+    },
+    {
+      "id": "place-2",
+      "user_id": "user-2",
+      "publishState": { "status": "PUBLISHED" },
+      "category": "running",
+      "name": "Лестница для интервальных тренировок",
+      "about": {
+        "description": "Длинный подъём для коротких забегов и упражнений на выносливость. После дождя ступени могут быть скользкими.",
+        "workingHours": "Круглосуточно"
+      },
+      "location": {
+        "latitude": 55.709,
+        "longitude": 37.546,
+        "address": "Москва, Воробьёвы горы (демо-точка)"
+      },
+      "rate": 1
+    },
+    {
+      "id": "place-3",
+      "user_id": "user-3",
+      "publishState": { "status": "PUBLISHED" },
+      "category": "cycling",
+      "name": "Памп-трек у парка",
+      "about": {
+        "description": "Трасса для тренировки поворотов и работы корпусом. На выходных здесь бывает много людей; шлем обязателен.",
+        "workingHours": "Ежедневно, 08:00–22:00"
+      },
+      "location": {
+        "latitude": 55.786,
+        "longitude": 37.532,
+        "address": "Москва, район Ходынского поля (демо-точка)"
+      },
+      "rate": 2
+    },
+    {
+      "id": "place-4",
+      "user_id": "user-4",
+      "publishState": { "status": "PUBLISHED" },
+      "category": "climbing",
+      "name": "Открытый скалодром в парке",
+      "about": {
+        "description": "Необычная точка для знакомства с лазанием на свежем воздухе. Перед поездкой стоит проверить доступность и правила площадки.",
+        "workingHours": "По расписанию площадки"
+      },
+      "location": {
+        "latitude": 55.73,
+        "longitude": 37.504,
+        "address": "Москва, западная часть города (демо-точка)"
+      },
+      "rate": 3
+    },
+    {
+      "id": "place-5",
+      "user_id": "user-5",
+      "publishState": { "status": "IN_REVIEW" },
+      "category": "workout",
+      "name": "Турники у набережной",
+      "about": {
+        "description": "Автор предложил площадку с видом на реку. Местоположение и условия доступа ещё проверяются.",
+        "workingHours": "Неизвестно"
+      },
+      "location": {
+        "latitude": 55.749,
+        "longitude": 37.533,
+        "address": "Москва, набережная (демо-точка)"
+      }
+    },
+    {
+      "id": "place-6",
+      "user_id": "user-6",
+      "publishState": {
+        "status": "REJECTED",
+        "reason": "Не удалось подтвердить существование площадки по указанному адресу."
+      },
+      "category": "cycling",
+      "name": "Велоплощадка во дворе",
+      "about": {
+        "description": "Заявка отклонена до уточнения адреса и фотографий.",
+        "workingHours": "Неизвестно"
+      },
+      "location": {
+        "latitude": 55.76,
+        "longitude": 37.61,
+        "address": "Москва, адрес требует уточнения (демо-точка)"
+      }
+    }
+  ]
+}
