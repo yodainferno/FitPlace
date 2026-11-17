@@ -1,5 +1,5 @@
 .placeCard {
-    display: flex;
-    flex-direction: column;
-    border: 1px solid #33f;
+  display: flex;
+  flex-direction: column;
+  border: 1px solid #33f;
 }

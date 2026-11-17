@@ -1,0 +1,8 @@
+commit_message="$1"
+
+case "$commit_message" in
+  /*) ;;
+  *) commit_message="$(pwd)/$commit_message" ;;
+esac
+
+pnpm --dir frontend exec commitlint --edit "$commit_message"

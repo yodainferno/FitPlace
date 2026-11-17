@@ -1,1 +1,1 @@
-export {default as PlacesExplorer} from './ui/PlacesExplorer';
+export { default as PlacesExplorer } from './ui/PlacesExplorer';

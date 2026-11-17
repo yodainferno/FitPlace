@@ -1,6 +1,4 @@
 // eslint-disable-next-line @typescript-eslint/no-require-imports
-const fs = require('fs');
-// eslint-disable-next-line @typescript-eslint/no-require-imports
 const jsonServer = require('json-server');
 // eslint-disable-next-line @typescript-eslint/no-require-imports
 const path = require('path');
@@ -14,15 +12,15 @@ server.use(jsonServer.bodyParser);
 
 // Нужно для небольшой задержки, чтобы запрос проходил не мгновенно, имитация реального апи
 server.use(async (req, res, next) => {
-    await new Promise((res) => {
-        setTimeout(res, 800);
-    });
-    next();
+  await new Promise((res) => {
+    setTimeout(res, 800);
+  });
+  next();
 });
 
 server.use(router);
 
 // запуск сервера
 server.listen(8000, () => {
-    console.log('server is running on 8000 port');
+  console.log('server is running on 8000 port');
 });

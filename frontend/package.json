@@ -6,9 +6,16 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "eslint",
+    "lint": "pnpm check:lint",
+    "check:format": "prettier --check .. --ignore-path ../.prettierignore",
+    "check:format:fix": "prettier --write .. --ignore-path ../.prettierignore",
+    "check:lint": "eslint . --max-warnings=0",
+    "check:lint:fix": "eslint . --fix --max-warnings=0",
+    "check:ts": "next typegen && tsc --noEmit",
     "check:fsd": "steiger ./src",
-    "start:mock-server": "node ./json-server/index.js"
+    "check:all": "pnpm check:format && pnpm check:lint && pnpm check:fsd && pnpm check:ts",
+    "start:mock-server": "node ./json-server/index.js",
+    "prepare": "cd .. && husky frontend/.husky"
   },
   "dependencies": {
     "axios": "^1.20.0",
@@ -19,6 +26,8 @@
     "zod": "^4.6.5"
   },
   "devDependencies": {
+    "@commitlint/cli": "21.2.4",
+    "@commitlint/config-conventional": "21.2.4",
     "@feature-sliced/steiger-plugin": "^0.8.2",
     "@tailwindcss/postcss": "^4",
     "@types/node": "^20",
@@ -26,7 +35,9 @@
     "@types/react-dom": "^19",
     "eslint": "^9",
     "eslint-config-next": "16.3.7",
+    "husky": "9.1.7",
     "json-server": "0.17.4",
+    "prettier": "3.10.1",
     "steiger": "^0.10.0",
     "tailwindcss": "^4",
     "typescript": "^5"

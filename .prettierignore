@@ -1,0 +1,16 @@
+**/node_modules/
+**/.next/
+**/dist/
+**/build/
+**/out/
+**/coverage/
+**/.git/
+**/.idea/
+**/.vercel/
+**/.husky/_/
+**/pnpm-lock.yaml
+**/next-env.d.ts
+**/*.tsbuildinfo
+**/.env
+**/.env.*
+!**/.env.example
