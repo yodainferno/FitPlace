@@ -1,4 +1,5 @@
 import type { PublishedPlace } from './placeSchema';
+import type { PlaceRecommendation } from '../place-recommendation';
 
 type PublishStateDraft = { status: 'DRAFT' };
 type PublishStateInReview = { status: 'IN_REVIEW' };
@@ -31,7 +32,7 @@ export type Place = {
     address: string;
   };
   //
-  rate?: 0 | 1 | 2 | 3;
+  recommendation?: PlaceRecommendation;
 };
 
 export interface PlaceOnMap extends PublishedPlace {

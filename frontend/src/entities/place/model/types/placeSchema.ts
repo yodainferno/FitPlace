@@ -1,4 +1,5 @@
 import { z } from 'zod';
+import { PlaceRecommendation } from '../place-recommendation';
 
 const publishedPlaceSchema = z.object({
   id: z.string().min(1),
@@ -19,9 +20,9 @@ const publishedPlaceSchema = z.object({
       workingHours: z.string(),
     })
     .optional(),
-  rate: z
-    .union([z.literal(0), z.literal(1), z.literal(2), z.literal(3)])
-    .optional(),
+  recommendation: z
+    .enum(PlaceRecommendation)
+    .default(PlaceRecommendation.Ordinary),
 });
 
 const publishedPlacesSchema = z.array(publishedPlaceSchema);

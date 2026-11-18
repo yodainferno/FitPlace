@@ -1,6 +1,6 @@
 import { getPlaceCategoryLabel } from '../../model/place-labels';
 import type { PublishedPlace } from '../../model/types/placeSchema';
-import { PlaceRating } from '../PlaceRating/PlaceRating';
+import { PlaceRecommendationBadge } from '../PlaceRecommendationBadge/PlaceRecommendationBadge';
 
 type PlacePopoverProps = {
   id: string;
@@ -16,7 +16,7 @@ export function PlacePopover({ id, place }: PlacePopoverProps) {
       <strong className="text-sm leading-snug wrap-anywhere">
         {place.name}
       </strong>
-      <PlaceRating value={place.rate} showLabel={false} />
+      <PlaceRecommendationBadge value={place.recommendation} showDescription />
     </div>
   );
 }

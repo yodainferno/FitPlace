@@ -103,15 +103,16 @@ Tailwind CSS 4 uses a CSS-first configuration in
 tokens; a separate `tailwind.config.js` is not needed. Colors follow
 [`frontend/BRANDBOOK.md`](frontend/BRANDBOOK.md).
 
-| Token              | Color     | Usage                                                |
-| ------------------ | --------- | ---------------------------------------------------- |
-| `primary`          | `#237D83` | Main actions, navigation and unselected map markers. |
-| `secondary`        | `#BB405C` | Selected places and small brand accents.             |
-| `foreground`       | `#24282B` | Main text.                                           |
-| `background`       | `#FFFFFF` | Main background.                                     |
-| `surface`          | `#F6F8F8` | Secondary surfaces.                                  |
-| `muted-foreground` | `#58666B` | Supporting text.                                     |
-| `border`           | `#DCE5E6` | Borders and separators.                              |
+| Token                   | Color     | Usage                                                         |
+| ----------------------- | --------- | ------------------------------------------------------------- |
+| `primary`               | `#237D83` | Main actions, navigation and "Worth a visit" recommendations. |
+| `secondary`             | `#BB405C` | "Worth a trip" recommendations and small brand accents.       |
+| `recommendation-detour` | `#A5660C` | Amber "Worth a detour" recommendations.                       |
+| `foreground`            | `#24282B` | Main text.                                                    |
+| `background`            | `#FFFFFF` | Main background.                                              |
+| `surface`               | `#F6F8F8` | Secondary surfaces.                                           |
+| `muted-foreground`      | `#58666B` | Supporting text.                                              |
+| `border`                | `#DCE5E6` | Borders and separators.                                       |
 
 Use semantic utilities such as `bg-primary`, `text-secondary`, `border-border`
 and `hover:bg-primary/10`, rather than repeating hex values in components.
@@ -137,6 +138,37 @@ Keep ordinary layout and states in Tailwind. `PlacesMap.module.css` is the only
 CSS Module: it targets nested DOM owned by MapLibre, including popup content
 and the mobile attribution position. MapLibre's own stylesheet is still
 required. The map's inline width and height are part of the map API integration.
+
+## Place Recommendations
+
+Recommendations describe how unusual a place is, not the quality of its
+facilities or customer reviews. The API uses the numeric `PlaceRecommendation`
+enum in `recommendation` instead of `rate`:
+
+| Value | Enum member   | Label             | Display                             |
+| ----- | ------------- | ----------------- | ----------------------------------- |
+| 0     | `Ordinary`    | Обычное место     | No badge; a neutral gray marker.    |
+| 1     | `WorthVisit`  | Заглянуть по пути | A subtle teal badge; a pin symbol.  |
+| 2     | `WorthDetour` | Сделать крюк      | An amber badge; a route symbol.     |
+| 3     | `WorthTrip`   | Цель поездки      | A solid berry badge; a flag symbol. |
+
+Zod validates the enum and defaults a missing recommendation to `Ordinary`.
+The same badges are used in the list, popup and details. A selected marker
+retains its recommendation color and gains an outline. The recommendation
+filter uses independent checkboxes for all four levels, including ordinary
+places. All are enabled by default; selecting none shows an empty result.
+The same selection filters both the list and map markers. Reset restores all
+four levels alongside the search and category defaults.
+
+Map pins retain the same shape and coordinate hotspot, with the corresponding
+recommendation symbol inside. Popovers and details explain the recommendation
+in one sentence. Clicking a list item centers its location in the unobscured
+part of the map without changing zoom and opens its details. Clicking a map
+marker only opens details; closing the dialog does not move the camera.
+
+The standalone star-rating demo at `/` remains a separate shared UI example.
+After changing `frontend/json-server/db.json` manually, restart the mock API:
+its running process holds the old database in memory.
 
 ## Git Hooks and Commit Messages
 

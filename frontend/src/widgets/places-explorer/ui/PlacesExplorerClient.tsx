@@ -14,11 +14,13 @@ import {
 import {
   getPlaceCategoryLabel,
   PlaceCard,
+  PLACE_RECOMMENDATION_LEVELS,
   type PlaceOnMap,
   type PublishedPlace,
 } from '@/src/entities/place';
 import { IconButton } from '@/src/shared/ui/IconButton';
 import { DEFAULT_PLACE_FILTERS, filterPlaces } from '../model/place-filters';
+import type { MapFocusRequest } from '../model/map-focus-request';
 import { PlaceFilters } from './PlaceFilters';
 import { PlaceDetailsDialog } from './PlaceDetailsDialog';
 
@@ -46,6 +48,8 @@ export function PlacesExplorerClient({
   const router = useRouter();
   const [isRefreshing, startTransition] = useTransition();
   const [selectedPlaceId, setSelectedPlaceId] = useState<string | null>(null);
+  const [mapFocusRequest, setMapFocusRequest] =
+    useState<MapFocusRequest | null>(null);
   const [isSidebarOpen, setIsSidebarOpen] = useState(true);
   const [filters, setFilters] = useState(DEFAULT_PLACE_FILTERS);
 
@@ -76,9 +80,15 @@ export function PlacesExplorerClient({
   );
   const selectedPlace = places.find((place) => place.id === selectedPlaceId);
   const hasFilters = Boolean(
-    filters.query || filters.category || filters.rating,
+    filters.query ||
+    filters.category ||
+    filters.recommendations.length !== PLACE_RECOMMENDATION_LEVELS.length,
   );
   const openPlace = (place: PlaceOnMap) => setSelectedPlaceId(place.id);
+  const openPlaceFromList = (place: PlaceOnMap) => {
+    setMapFocusRequest({ location: place.location, isSidebarOpen });
+    openPlace(place);
+  };
 
   return (
     <main
@@ -89,6 +99,7 @@ export function PlacesExplorerClient({
         places={placesOnMap}
         onClickPlace={openPlace}
         isSidebarOpen={isSidebarOpen}
+        focusRequest={mapFocusRequest}
       />
       {isSidebarOpen ? (
         <aside
@@ -156,7 +167,7 @@ export function PlacesExplorerClient({
               <ul aria-label="Список мест">
                 {placesOnMap.map((place) => (
                   <li key={place.id}>
-                    <PlaceCard place={place} onClick={openPlace} />
+                    <PlaceCard place={place} onClick={openPlaceFromList} />
                   </li>
                 ))}
               </ul>

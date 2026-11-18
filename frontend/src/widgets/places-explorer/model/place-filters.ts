@@ -1,15 +1,19 @@
-import type { PublishedPlace } from '@/src/entities/place';
+import {
+  PLACE_RECOMMENDATION_LEVELS,
+  type PlaceRecommendation,
+  type PublishedPlace,
+} from '@/src/entities/place';
 
 export type PlaceFilters = {
   query: string;
   category: string;
-  rating: string;
+  recommendations: readonly PlaceRecommendation[];
 };
 
 export const DEFAULT_PLACE_FILTERS: PlaceFilters = {
   query: '',
   category: '',
-  rating: '',
+  recommendations: PLACE_RECOMMENDATION_LEVELS,
 };
 
 export function filterPlaces(
@@ -22,17 +26,14 @@ export function filterPlaces(
     const text = `${place.name} ${place.location.address}`.toLocaleLowerCase(
       'ru',
     );
-    const rate = place.rate ?? 0;
-    const matchesRating =
-      !filters.rating ||
-      (filters.rating === 'unrated'
-        ? rate === 0
-        : rate >= Number(filters.rating));
+    const matchesRecommendation = filters.recommendations.includes(
+      place.recommendation,
+    );
 
     return (
       (!query || text.includes(query)) &&
       (!filters.category || place.category === filters.category) &&
-      matchesRating
+      matchesRecommendation
     );
   });
 }

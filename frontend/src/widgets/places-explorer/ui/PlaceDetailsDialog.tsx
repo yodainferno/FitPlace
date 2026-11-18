@@ -4,7 +4,7 @@ import { useEffect, useId, useRef } from 'react';
 import { Clock3, MapPin, UserRound, X } from 'lucide-react';
 import {
   getPlaceCategoryLabel,
-  PlaceRating,
+  PlaceRecommendationBadge,
   type PublishedPlace,
 } from '@/src/entities/place';
 import { IconButton } from '@/src/shared/ui/IconButton';
@@ -72,7 +72,10 @@ export function PlaceDetailsDialog({
         >
           {place.name}
         </h2>
-        <PlaceRating value={place.rate} />
+        <PlaceRecommendationBadge
+          value={place.recommendation}
+          showDescription
+        />
         <p className="my-6 text-sm leading-[1.7] text-muted-foreground wrap-anywhere">
           {place.about?.description || 'Описание пока не добавлено.'}
         </p>

@@ -2,7 +2,7 @@ import { ChevronRight, MapPin } from 'lucide-react';
 import { cn } from '@/src/shared/lib';
 import { getPlaceCategoryLabel } from '../../model/place-labels';
 import type { PlaceOnMap } from '../../model/types/place';
-import { PlaceRating } from '../PlaceRating/PlaceRating';
+import { PlaceRecommendationBadge } from '../PlaceRecommendationBadge/PlaceRecommendationBadge';
 
 type PlaceCardProps = {
   place: PlaceOnMap;
@@ -44,7 +44,7 @@ export function PlaceCard({ place, onClick }: PlaceCardProps) {
         <MapPin size={14} className="mt-0.5 shrink-0" aria-hidden="true" />
         <span>{place.location.address}</span>
       </span>
-      <PlaceRating value={place.rate} />
+      <PlaceRecommendationBadge value={place.recommendation} />
     </button>
   );
 }

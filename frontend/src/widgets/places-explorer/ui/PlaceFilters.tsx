@@ -1,5 +1,9 @@
 import { Search } from 'lucide-react';
-import { getPlaceCategoryLabel } from '@/src/entities/place';
+import {
+  getPlaceCategoryLabel,
+  getPlaceRecommendationLabel,
+  PLACE_RECOMMENDATION_LEVELS,
+} from '@/src/entities/place';
 import type { PlaceFilters as PlaceFiltersValue } from '../model/place-filters';
 
 type PlaceFiltersProps = {
@@ -28,7 +32,7 @@ export function PlaceFilters({
           }
         />
       </label>
-      <div className="grid grid-cols-[minmax(0,1fr)_minmax(0,0.9fr)] gap-2.5">
+      <div className="grid gap-2.5">
         <label className="grid min-w-0 gap-1.5 text-[11px] font-semibold text-muted-foreground">
           Категория
           <select
@@ -46,22 +50,38 @@ export function PlaceFilters({
             ))}
           </select>
         </label>
-        <label className="grid min-w-0 gap-1.5 text-[11px] font-semibold text-muted-foreground">
-          Звёзды
-          <select
-            className="w-full min-w-0 rounded border border-border bg-background p-2 text-xs font-normal text-foreground focus-visible:outline-2 focus-visible:outline-offset-1 focus-visible:outline-primary"
-            value={value.rating}
-            onChange={(event) =>
-              onChange({ ...value, rating: event.target.value })
-            }
-          >
-            <option value="">Любая оценка</option>
-            <option value="unrated">Без звёзд</option>
-            <option value="1">От 1 звезды</option>
-            <option value="2">От 2 звёзд</option>
-            <option value="3">3 звезды</option>
-          </select>
-        </label>
+        <fieldset className="min-w-0">
+          <legend className="mb-1.5 text-[11px] font-semibold text-muted-foreground">
+            Рекомендации
+          </legend>
+          <div className="grid grid-cols-2 gap-x-3 gap-y-1">
+            {PLACE_RECOMMENDATION_LEVELS.map((level) => (
+              <label
+                key={level}
+                className="flex min-h-8 min-w-0 cursor-pointer items-start gap-2 py-1 text-xs leading-5 text-foreground"
+              >
+                <input
+                  type="checkbox"
+                  className="mt-1 size-3.5 shrink-0 accent-primary focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary"
+                  checked={value.recommendations.includes(level)}
+                  onChange={(event) =>
+                    onChange({
+                      ...value,
+                      recommendations: event.target.checked
+                        ? [...value.recommendations, level]
+                        : value.recommendations.filter(
+                            (selected) => selected !== level,
+                          ),
+                    })
+                  }
+                />
+                <span className="wrap-anywhere">
+                  {getPlaceRecommendationLabel(level)}
+                </span>
+              </label>
+            ))}
+          </div>
+        </fieldset>
       </div>
     </div>
   );

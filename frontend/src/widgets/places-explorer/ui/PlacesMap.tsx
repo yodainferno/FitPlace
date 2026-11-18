@@ -8,14 +8,22 @@ import Map, {
   type MapRef,
 } from 'react-map-gl/maplibre';
 import { LngLatBounds, type Popup as MapLibrePopup } from 'maplibre-gl';
-import { MapPin, RotateCcw } from 'lucide-react';
-import { PlacePopover, type PlaceOnMap } from '@/src/entities/place';
+import { RotateCcw } from 'lucide-react';
+import {
+  getPlaceRecommendationLabel,
+  getPlaceRecommendationMarkerClassName,
+  PlacePopover,
+  PlaceMapPin,
+  PLACE_MAP_PIN_SIZE,
+  type PlaceOnMap,
+} from '@/src/entities/place';
 import { cn } from '@/src/shared/lib';
 import { IconButton } from '@/src/shared/ui/IconButton';
 import 'maplibre-gl/dist/maplibre-gl.css';
+import type { MapFocusRequest } from '../model/map-focus-request';
 import cls from './PlacesMap.module.css';
 
-const MARKER_ICON_SIZE = 34;
+const MARKER_ICON_SIZE = PLACE_MAP_PIN_SIZE;
 // MapPin's tip is (12, 22), not the center (12, 12) of its 24x24 viewBox.
 const MARKER_OFFSET: [number, number] = [
   0,
@@ -38,6 +46,7 @@ const POPUP_OFFSET = {
 type PlacesMapProps = {
   places: PlaceOnMap[];
   isSidebarOpen: boolean;
+  focusRequest: MapFocusRequest | null;
   onClickPlace: (place: PlaceOnMap) => void;
 };
 
@@ -57,6 +66,7 @@ export default function PlacesMap({
   places,
   onClickPlace,
   isSidebarOpen,
+  focusRequest,
 }: PlacesMapProps) {
   const mapRef = useRef<MapRef>(null);
   const popupRef = useRef<MapLibrePopup>(null);
@@ -66,6 +76,17 @@ export default function PlacesMap({
   const [hasMapError, setHasMapError] = useState(false);
   const [attempt, setAttempt] = useState(0);
   const hoveredPlace = places.find((place) => place.id === hoveredPlaceId);
+
+  useEffect(() => {
+    const map = mapRef.current;
+    if (!map || !isReady || !focusRequest) return;
+
+    map.easeTo({
+      center: [focusRequest.location.longitude, focusRequest.location.latitude],
+      padding: getPadding(map, focusRequest.isSidebarOpen),
+      duration: 650,
+    });
+  }, [focusRequest, isReady]);
 
   useEffect(() => {
     const popup = popupRef.current;
@@ -148,7 +169,7 @@ export default function PlacesMap({
             <button
               type="button"
               data-place-id={place.id}
-              aria-label={`Открыть место: ${place.name}`}
+              aria-label={`Открыть место: ${place.name}. ${getPlaceRecommendationLabel(place.recommendation)}`}
               aria-haspopup="dialog"
               aria-pressed={Boolean(place.highlight)}
               aria-describedby={
@@ -157,9 +178,10 @@ export default function PlacesMap({
               className={cn(
                 'flex size-11 items-center justify-center rounded border-0 bg-transparent p-0 drop-shadow-[0_2px_2px_rgb(36_40_43_/_25%)]',
                 'focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary',
-                place.highlight
-                  ? 'text-secondary hover:text-secondary-hover focus-visible:text-secondary-hover'
-                  : 'text-primary hover:text-primary-hover focus-visible:text-primary-hover',
+                getPlaceRecommendationMarkerClassName(place.recommendation),
+                'hover:brightness-90',
+                place.highlight &&
+                  'outline-2 outline-offset-2 outline-foreground/70',
               )}
               onMouseEnter={() => setHoveredPlaceId(place.id)}
               onMouseLeave={() => clearHover(place.id)}
@@ -174,13 +196,7 @@ export default function PlacesMap({
                 onClickPlace(place);
               }}
             >
-              <MapPin
-                size={MARKER_ICON_SIZE}
-                fill="currentColor"
-                stroke="white"
-                strokeWidth={1.5}
-                aria-hidden="true"
-              />
+              <PlaceMapPin value={place.recommendation} />
             </button>
           </Marker>
         ))}
