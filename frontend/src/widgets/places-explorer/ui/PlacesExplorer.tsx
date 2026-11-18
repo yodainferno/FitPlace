@@ -1,35 +1,23 @@
-'use client';
-
-import React, { useEffect, useState } from 'react';
 import { getAllPlaces } from '../api/getAllPublishedPlaces';
-import { type Place, PlaceCard } from '@/src/entities/place';
-import { LoadingState, type LoadState } from '@/src/shared/model';
+import { PlacesExplorerClient } from './PlacesExplorerClient';
 
-const PlacesExplorer = () => {
-  const [places, setPlaces] = useState<LoadState<Place[]>>(LoadingState);
+export default async function PlacesExplorer() {
+  const result = await getAllPlaces();
 
-  useEffect(() => {
-    getAllPlaces().then((resp) => {
-      setPlaces(resp);
-    });
-  }, []);
-
-  if (places.state === 'loading') {
-    return <div>Loading...</div>;
+  if (result.state !== 'success') {
+    return (
+      <p role="alert">
+        Не удалось загрузить места.{' '}
+        <a href="/places" className="underline">
+          Повторить
+        </a>
+      </p>
+    );
   }
-  if (places.state === 'error') {
-    return <div>Error!</div>;
-  }
-  if (places.state === 'success' && !places.data.length) {
-    return <div>No data!</div>;
-  }
-  return (
-    <div>
-      {places.data.map((place) => (
-        <PlaceCard key={place.id} place={place} />
-      ))}
-    </div>
-  );
-};
 
-export default PlacesExplorer;
+  if (!result.data.length) {
+    return <p>Опубликованных мест пока нет.</p>;
+  }
+
+  return <PlacesExplorerClient places={result.data} />;
+}

@@ -1,21 +1,35 @@
-import axios from 'axios';
+import 'server-only';
+
 import {
   type LoadState,
   ErrorState,
   createSuccessState,
 } from '@/src/shared/model';
-import { checkPublishedPlacesSchema, type Place } from '@/src/entities/place';
+import {
+  checkPublishedPlacesSchema,
+  type PublishedPlace,
+} from '@/src/entities/place';
 
-export async function getAllPlaces(): Promise<LoadState<Place[]>> {
-  const baseUrl = process.env.NEXT_PUBLIC_MOCK_API_URL;
-  const url = `${baseUrl}/places?publishState.status=PUBLISHED`;
-
+export async function getAllPlaces(): Promise<LoadState<PublishedPlace[]>> {
   try {
-    const response = await axios.get(url);
-    const places = checkPublishedPlacesSchema(response.data);
-    return createSuccessState<Place[]>(places);
+    const baseUrl = process.env.NEXT_PUBLIC_MOCK_API_URL;
+    if (!baseUrl) {
+      throw new Error('NEXT_PUBLIC_MOCK_API_URL is not configured');
+    }
+
+    const response = await fetch(
+      `${baseUrl}/places?publishState.status=PUBLISHED`,
+      { cache: 'no-store', signal: AbortSignal.timeout(10_000) },
+    );
+
+    if (!response.ok) {
+      throw new Error(`Places API returned ${response.status}`);
+    }
+
+    const data: unknown = await response.json();
+    return createSuccessState(checkPublishedPlacesSchema(data));
   } catch (error) {
-    console.error(error);
+    console.error('Failed to load published places:', error);
     return ErrorState;
   }
 }

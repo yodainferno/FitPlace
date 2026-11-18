@@ -31,3 +31,7 @@ export type Place = {
   //
   rate?: 0 | 1 | 2 | 3;
 };
+
+export interface PlaceOnMap extends Place {
+  highlight?: boolean;
+}
