@@ -1,0 +1,29 @@
+<svg
+  xmlns="http://www.w3.org/2000/svg"
+  width="128"
+  height="128"
+  viewBox="0 0 128 128"
+  fill="none"
+  role="img"
+  aria-label="Знак Fitplace"
+>
+  <title>Знак Fitplace</title>
+  <desc>
+    Заметка с загнутым уголком, маршрутом и отметкой найденного места.
+  </desc>
+  <path
+    fill="#237D83"
+    fill-rule="evenodd"
+    d="M32 8H84L116 40V100C116 111.046 107.046 120 96 120H32C20.954 120 12 111.046 12 100V28C12 16.954 20.954 8 32 8ZM32 20C27.582 20 24 23.582 24 28V100C24 104.418 27.582 108 32 108H96C100.418 108 104 104.418 104 100V44H96C87.163 44 80 36.837 80 28V20H32Z"
+    clip-rule="evenodd"
+  />
+  <path fill="#BB405C" d="M84 8L116 40H96C89.373 40 84 34.627 84 28V8Z" />
+  <path
+    fill="none"
+    stroke="#237D83"
+    stroke-width="10"
+    stroke-linecap="round"
+    d="M36 94C44 75 55 73 68 79C76 83 82 82 85 77"
+  />
+  <circle cx="92" cy="60" r="9" fill="#BB405C" />
+</svg>
