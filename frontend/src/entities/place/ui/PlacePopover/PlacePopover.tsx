@@ -9,15 +9,13 @@ type PlacePopoverProps = {
 
 export function PlacePopover({ id, place }: PlacePopoverProps) {
   return (
-    <div
-      id={id}
-      role="tooltip"
-      className="grid w-[220px] gap-2 text-neutral-900"
-    >
-      <span className="text-xs text-green-800">
+    <div id={id} role="tooltip" className="grid w-55 gap-2 text-foreground">
+      <span className="text-xs text-primary">
         {getPlaceCategoryLabel(place.category)}
       </span>
-      <strong className="text-sm leading-snug break-words">{place.name}</strong>
+      <strong className="text-sm leading-snug wrap-anywhere">
+        {place.name}
+      </strong>
       <PlaceRating value={place.rate} showLabel={false} />
     </div>
   );

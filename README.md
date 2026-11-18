@@ -96,6 +96,48 @@ files, dependencies, build output, lock files and local environment files are
 excluded from formatting. Enable the project's Prettier integration in your
 editor to use the same formatting on save.
 
+## Styling
+
+Tailwind CSS 4 uses a CSS-first configuration in
+`frontend/src/app/globals.css`. The `@theme static` block defines the design
+tokens; a separate `tailwind.config.js` is not needed. Colors follow
+[`frontend/BRANDBOOK.md`](frontend/BRANDBOOK.md).
+
+| Token              | Color     | Usage                                                |
+| ------------------ | --------- | ---------------------------------------------------- |
+| `primary`          | `#237D83` | Main actions, navigation and unselected map markers. |
+| `secondary`        | `#BB405C` | Selected places and small brand accents.             |
+| `foreground`       | `#24282B` | Main text.                                           |
+| `background`       | `#FFFFFF` | Main background.                                     |
+| `surface`          | `#F6F8F8` | Secondary surfaces.                                  |
+| `muted-foreground` | `#58666B` | Supporting text.                                     |
+| `border`           | `#DCE5E6` | Borders and separators.                              |
+
+Use semantic utilities such as `bg-primary`, `text-secondary`, `border-border`
+and `hover:bg-primary/10`, rather than repeating hex values in components.
+`primary-hover` and `secondary-hover` darken the corresponding accents;
+`primary-foreground` and `secondary-foreground` are white text for solid accent
+backgrounds. Gold `rating` and red `destructive` have separate semantic roles.
+
+The theme also contains panel, popup and dialog shadows and a `map:` breakpoint
+starting at 721 px. Below it, the places list becomes a bottom sheet. The
+existing Arial/Helvetica fallback is retained; no web font is loaded.
+
+Use `cn` from `@/src/shared/lib` for conditional classes and utility overrides:
+
+```tsx
+className={cn('p-2 text-primary', selected && 'text-secondary', className)}
+```
+
+`cn` combines `clsx` with `tailwind-merge`: falsy conditions are ignored and later
+conflicting utilities win. Shared `IconButton` accepts `className` overrides
+through the same helper.
+
+Keep ordinary layout and states in Tailwind. `PlacesMap.module.css` is the only
+CSS Module: it targets nested DOM owned by MapLibre, including popup content
+and the mobile attribution position. MapLibre's own stylesheet is still
+required. The map's inline width and height are part of the map API integration.
+
 ## Git Hooks and Commit Messages
 
 - Hooks live in the root `.husky/`; the root package owns Husky and commitlint.

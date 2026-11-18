@@ -7,7 +7,7 @@ import {
   PlaceRating,
   type PublishedPlace,
 } from '@/src/entities/place';
-import cls from './PlacesExplorer.module.css';
+import { IconButton } from '@/src/shared/ui/IconButton';
 
 type PlaceDetailsDialogProps = {
   place: PublishedPlace;
@@ -38,7 +38,7 @@ export function PlaceDetailsDialog({
   return (
     <dialog
       ref={dialogRef}
-      className={cls.dialog}
+      className="m-auto max-h-[calc(100dvh-2rem)] w-[min(35rem,calc(100vw-2rem))] overflow-y-auto rounded-lg border border-border bg-background p-0 text-foreground shadow-dialog backdrop:bg-foreground/45"
       aria-labelledby={titleId}
       onCancel={(event) => {
         event.preventDefault();
@@ -57,43 +57,58 @@ export function PlaceDetailsDialog({
         }
       }}
     >
-      <article className={cls.details}>
-        <div className={cls.detailsTop}>
-          <span className={cls.category}>
+      <article className="p-5 map:p-6">
+        <div className="mb-3 flex items-center justify-between gap-3">
+          <span className="text-xs font-semibold text-primary">
             {getPlaceCategoryLabel(place.category)}
           </span>
-          <button
-            type="button"
-            className={cls.iconButton}
-            aria-label="Закрыть карточку места"
-            title="Закрыть"
-            onClick={onClose}
-          >
+          <IconButton label="Закрыть карточку места" onClick={onClose}>
             <X size={20} aria-hidden="true" />
-          </button>
+          </IconButton>
         </div>
-        <h2 id={titleId} className={cls.detailsTitle}>
+        <h2
+          id={titleId}
+          className="mb-3.5 text-[21px] leading-[1.3] font-semibold wrap-anywhere map:text-2xl"
+        >
           {place.name}
         </h2>
         <PlaceRating value={place.rate} />
-        <p className={cls.description}>
+        <p className="my-6 text-sm leading-[1.7] text-muted-foreground wrap-anywhere">
           {place.about?.description || 'Описание пока не добавлено.'}
         </p>
-        <dl className={cls.facts}>
-          <div>
-            <MapPin size={18} aria-hidden="true" />
-            <dt>Адрес</dt>
-            <dd>{place.location.address}</dd>
+        <dl className="grid gap-4.5 border-t border-border pt-5">
+          <div className="grid grid-cols-[1.25rem_minmax(0,1fr)] gap-x-3 gap-y-1">
+            <MapPin
+              size={18}
+              className="row-span-2 mt-0.5 text-primary"
+              aria-hidden="true"
+            />
+            <dt className="text-[11px] text-muted-foreground">Адрес</dt>
+            <dd className="text-[13px] leading-relaxed wrap-anywhere">
+              {place.location.address}
+            </dd>
           </div>
-          <div>
-            <Clock3 size={18} aria-hidden="true" />
-            <dt>Часы работы</dt>
-            <dd>{place.about?.workingHours || 'Не указаны'}</dd>
+          <div className="grid grid-cols-[1.25rem_minmax(0,1fr)] gap-x-3 gap-y-1">
+            <Clock3
+              size={18}
+              className="row-span-2 mt-0.5 text-primary"
+              aria-hidden="true"
+            />
+            <dt className="text-[11px] text-muted-foreground">Часы работы</dt>
+            <dd className="text-[13px] leading-relaxed wrap-anywhere">
+              {place.about?.workingHours || 'Не указаны'}
+            </dd>
           </div>
-          <div>
-            <UserRound size={18} aria-hidden="true" />
-            <dt>Автор</dt>
-            <dd>{place.user_id || 'Не указан'}</dd>
+          <div className="grid grid-cols-[1.25rem_minmax(0,1fr)] gap-x-3 gap-y-1">
+            <UserRound
+              size={18}
+              className="row-span-2 mt-0.5 text-primary"
+              aria-hidden="true"
+            />
+            <dt className="text-[11px] text-muted-foreground">Автор</dt>
+            <dd className="text-[13px] leading-relaxed wrap-anywhere">
+              {place.user_id || 'Не указан'}
+            </dd>
           </div>
         </dl>
       </article>

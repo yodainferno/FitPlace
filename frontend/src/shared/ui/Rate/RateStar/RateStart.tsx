@@ -1,15 +1,17 @@
 import { Star } from 'lucide-react';
+import { cn } from '@/src/shared/lib';
 
 type RateProps = {
   variant: 'filled' | 'empty';
 };
-export const RateStar = ({ variant }: RateProps) => {
-  return (
-    <Star
-      aria-hidden="true"
-      color="#f59e0b"
-      fill={variant === 'filled' ? '#f59e0b' : 'none'}
-      size={20}
-    />
-  );
-};
+
+export const RateStar = ({ variant }: RateProps) => (
+  <Star
+    aria-hidden="true"
+    className={cn(
+      'text-rating',
+      variant === 'filled' ? 'fill-current' : 'fill-none',
+    )}
+    size={20}
+  />
+);

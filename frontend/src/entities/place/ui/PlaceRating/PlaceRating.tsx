@@ -11,11 +11,11 @@ export function PlaceRating({ value, showLabel = true }: PlaceRatingProps) {
   const label = getPlaceRatingLabel(value);
 
   if (!value) {
-    return <span className="text-xs text-neutral-500">{label}</span>;
+    return <span className="text-xs text-muted-foreground">{label}</span>;
   }
 
   return (
-    <span className="inline-flex flex-wrap items-center gap-x-2 gap-y-1 text-xs text-neutral-600">
+    <span className="inline-flex flex-wrap items-center gap-x-2 gap-y-1 text-xs text-muted-foreground">
       <RateDisplay
         value={value}
         maxValue={3}

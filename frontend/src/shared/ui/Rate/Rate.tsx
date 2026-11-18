@@ -21,7 +21,7 @@ export const Rate = ({
   );
 
   return (
-    <fieldset className="flex max-w-fit gap-1 rounded-sm has-focus-visible:outline-2 has-focus-visible:outline-offset-2 has-focus-visible:outline-amber-600">
+    <fieldset className="flex max-w-fit gap-1 rounded-sm has-focus-visible:outline-2 has-focus-visible:outline-offset-2 has-focus-visible:outline-primary">
       <legend className="sr-only">{srLegendLabel ?? 'Оценка'}</legend>
       {editable ? (
         <RateEditor key={value ?? 'none'} value={value} maxValue={maxValue}>

@@ -10,9 +10,10 @@ import Map, {
 import { LngLatBounds, type Popup as MapLibrePopup } from 'maplibre-gl';
 import { MapPin, RotateCcw } from 'lucide-react';
 import { PlacePopover, type PlaceOnMap } from '@/src/entities/place';
-import { classNames } from '@/src/shared/lib';
+import { cn } from '@/src/shared/lib';
+import { IconButton } from '@/src/shared/ui/IconButton';
 import 'maplibre-gl/dist/maplibre-gl.css';
-import cls from './PlacesExplorer.module.css';
+import cls from './PlacesMap.module.css';
 
 const MARKER_ICON_SIZE = 34;
 // MapPin's tip is (12, 22), not the center (12, 12) of its 24x24 viewBox.
@@ -98,9 +99,18 @@ export default function PlacesMap({
     setHoveredPlaceId((current) => (current === placeId ? null : current));
   }
 
+  const noticeClassName = cn(
+    'absolute right-4 bottom-10 z-1 flex max-w-[min(22.5rem,calc(100%-2rem))] items-center gap-2 rounded border border-border bg-background px-3.5 py-2.5 text-xs text-muted-foreground',
+    isSidebarOpen && 'max-map:bottom-[calc(52dvh+54px)]',
+  );
+
   return (
     <section
-      className={classNames(cls.map, { [cls.withSidebar]: isSidebarOpen })}
+      className={cn(
+        'absolute inset-0',
+        cls.controls,
+        isSidebarOpen && cls.withSidebar,
+      )}
       aria-label="Карта мест"
     >
       <Map
@@ -144,9 +154,13 @@ export default function PlacesMap({
               aria-describedby={
                 hoveredPlace?.id === place.id ? popoverId : undefined
               }
-              className={classNames(cls.marker, {
-                [cls.markerSelected]: place.highlight,
-              })}
+              className={cn(
+                'flex size-11 items-center justify-center rounded border-0 bg-transparent p-0 drop-shadow-[0_2px_2px_rgb(36_40_43_/_25%)]',
+                'focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary',
+                place.highlight
+                  ? 'text-secondary hover:text-secondary-hover focus-visible:text-secondary-hover'
+                  : 'text-primary hover:text-primary-hover focus-visible:text-primary-hover',
+              )}
               onMouseEnter={() => setHoveredPlaceId(place.id)}
               onMouseLeave={() => clearHover(place.id)}
               onFocus={() => setHoveredPlaceId(place.id)}
@@ -181,25 +195,22 @@ export default function PlacesMap({
             closeButton={false}
             closeOnClick={false}
             focusAfterOpen={false}
-            className={cls.placePopup}
+            className={cn('pointer-events-none', cls.popup)}
           >
             <PlacePopover id={popoverId} place={hoveredPlace} />
           </Popup>
         )}
       </Map>
       {!isReady && !hasMapError && (
-        <p className={cls.mapNotice} role="status">
+        <p className={noticeClassName} role="status">
           Загружаем карту...
         </p>
       )}
       {hasMapError && (
-        <div className={cls.mapNotice} role="alert">
+        <div className={noticeClassName} role="alert">
           <span>Не удалось полностью загрузить карту.</span>
-          <button
-            type="button"
-            className={cls.iconButton}
-            aria-label="Повторить загрузку карты"
-            title="Повторить"
+          <IconButton
+            label="Повторить загрузку карты"
             onClick={() => {
               setIsReady(false);
               setHasMapError(false);
@@ -207,7 +218,7 @@ export default function PlacesMap({
             }}
           >
             <RotateCcw size={16} aria-hidden="true" />
-          </button>
+          </IconButton>
         </div>
       )}
     </section>

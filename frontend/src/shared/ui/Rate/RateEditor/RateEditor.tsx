@@ -28,7 +28,7 @@ export const RateEditor = ({ value, maxValue, children }: RateEditorProps) => {
     <span className="flex flex-col gap-2">
       <button
         type="button"
-        className="inline-flex size-6 items-center justify-center rounded-sm hover:bg-amber-100"
+        className="inline-flex size-6 items-center justify-center rounded-sm hover:bg-primary/10"
         aria-label={editing ? 'Отменить изменение оценки' : 'Изменить оценку'}
         title={editing ? 'Отменить изменение оценки' : 'Изменить оценку'}
         onClick={editing ? cancel : () => setEditing(true)}

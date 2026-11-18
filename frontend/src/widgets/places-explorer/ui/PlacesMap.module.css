@@ -1,0 +1,18 @@
+.controls :global(.maplibregl-ctrl-top-right) {
+  top: 6px;
+  right: 6px;
+}
+
+.popup :global(.maplibregl-popup-content) {
+  padding: 14px;
+  border-radius: var(--radius-md);
+  background: var(--color-background);
+  color: var(--color-foreground);
+  box-shadow: var(--shadow-popup);
+}
+
+@media (max-width: 720px) {
+  .withSidebar :global(.maplibregl-ctrl-bottom-right) {
+    bottom: calc(52dvh + 24px);
+  }
+}
