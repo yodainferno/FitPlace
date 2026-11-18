@@ -1,10 +1,66 @@
 .placeCard {
   display: flex;
+  width: 100%;
   flex-direction: column;
+  gap: 8px;
+  padding: 16px;
+  border: 0;
+  border-bottom: 1px solid #e7ece8;
+  border-left: 3px solid transparent;
+  background: #fff;
+  color: #1b2921;
+  text-align: left;
   cursor: pointer;
-  border: 1px solid #33f;
+}
+
+.placeCard:hover {
+  background: #f5f8f5;
+}
+
+.placeCard:focus-visible {
+  position: relative;
+  outline: 2px solid #237347;
+  outline-offset: -3px;
 }
 
 .selected {
-  border-color: #f00;
+  border-left-color: #237347;
+  background: #edf5ee;
+}
+
+.category {
+  color: #397049;
+  font-size: 11px;
+  font-weight: 600;
+}
+
+.heading {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.heading > svg,
+.address > svg {
+  flex: none;
+  margin-top: 2px;
+  color: #738078;
+}
+
+.name {
+  font-size: 15px;
+  font-weight: 600;
+  line-height: 1.4;
+  overflow-wrap: anywhere;
+}
+
+.address {
+  display: flex;
+  align-items: flex-start;
+  gap: 6px;
+  color: #667369;
+  font-size: 12px;
+  line-height: 1.5;
+  overflow-wrap: anywhere;
 }

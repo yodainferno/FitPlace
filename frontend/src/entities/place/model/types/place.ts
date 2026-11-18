@@ -1,3 +1,5 @@
+import type { PublishedPlace } from './placeSchema';
+
 type PublishStateDraft = { status: 'DRAFT' };
 type PublishStateInReview = { status: 'IN_REVIEW' };
 type PublishStateRejected = { status: 'REJECTED'; reason: string };
@@ -32,6 +34,6 @@ export type Place = {
   rate?: 0 | 1 | 2 | 3;
 };
 
-export interface PlaceOnMap extends Place {
+export interface PlaceOnMap extends PublishedPlace {
   highlight?: boolean;
 }
