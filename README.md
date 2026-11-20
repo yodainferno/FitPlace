@@ -1,8 +1,8 @@
 # Fitplace
 
 A React and Next.js application for discovering interesting places for physical
-activities. The current prototype contains a rating component and a list of
-published places backed by a local mock API. Map discovery is the next feature.
+activities. The current prototype provides an interactive map and a filtered list
+of published places backed by a local mock API.
 
 ## Requirements
 
@@ -48,8 +48,8 @@ Start Next.js in another terminal:
 pnpm dev
 ```
 
-Open `http://localhost:3000` for the rating demo or
-`http://localhost:3000/places` for the published places list. Next.js may select
+Open `http://localhost:3000`; it redirects to the map at
+`http://localhost:3000/places`. Next.js may select
 another port if port 3000 is occupied; use the URL printed in the terminal.
 
 ## Environment Variables
@@ -118,7 +118,7 @@ Use semantic utilities such as `bg-primary`, `text-secondary`, `border-border`
 and `hover:bg-primary/10`, rather than repeating hex values in components.
 `primary-hover` and `secondary-hover` darken the corresponding accents;
 `primary-foreground` and `secondary-foreground` are white text for solid accent
-backgrounds. Gold `rating` and red `destructive` have separate semantic roles.
+backgrounds. Red `destructive` is reserved for errors and destructive actions.
 
 The theme also contains panel, popup and dialog shadows and a `map:` breakpoint
 starting at 721 px. Below it, the places list becomes a bottom sheet. The
@@ -166,7 +166,6 @@ in one sentence. Clicking a list item centers its location in the unobscured
 part of the map without changing zoom and opens its details. Clicking a map
 marker only opens details; closing the dialog does not move the camera.
 
-The standalone star-rating demo at `/` remains a separate shared UI example.
 After changing `frontend/json-server/db.json` manually, restart the mock API:
 its running process holds the old database in memory.
 

@@ -1,1 +1,5 @@
-export { HomePage as default } from '@/src/_pages/home';
+import { redirect } from 'next/navigation';
+
+export default function HomePage() {
+  redirect('/places');
+}
