@@ -21,6 +21,13 @@ import { cn } from '@/src/shared/lib';
 import { IconButton } from '@/src/shared/ui/IconButton';
 import 'maplibre-gl/dist/maplibre-gl.css';
 import type { MapFocusRequest } from '../model/map-focus-request';
+import {
+  areMapViewsEqual,
+  DEFAULT_MAP_VIEW,
+  MAX_MAP_PITCH,
+  MAX_MAP_ZOOM,
+  type MapViewState,
+} from '../model/map-view-state';
 import cls from './PlacesMap.module.css';
 
 const MARKER_ICON_SIZE = PLACE_MAP_PIN_SIZE;
@@ -47,8 +54,21 @@ type PlacesMapProps = {
   places: PlaceOnMap[];
   isSidebarOpen: boolean;
   focusRequest: MapFocusRequest | null;
+  viewState: MapViewState | null;
+  onViewStateChange: (view: MapViewState) => void;
   onClickPlace: (place: PlaceOnMap) => void;
 };
+
+function getMapView(map: MapRef): MapViewState {
+  const center = map.getCenter();
+  return {
+    longitude: center.lng,
+    latitude: center.lat,
+    zoom: map.getZoom(),
+    bearing: map.getBearing(),
+    pitch: map.getPitch(),
+  };
+}
 
 function getPadding(map: MapRef, isSidebarOpen: boolean) {
   const { clientWidth, clientHeight } = map.getContainer();
@@ -67,8 +87,11 @@ export default function PlacesMap({
   onClickPlace,
   isSidebarOpen,
   focusRequest,
+  viewState,
+  onViewStateChange,
 }: PlacesMapProps) {
   const mapRef = useRef<MapRef>(null);
+  const isRestoringView = useRef(false);
   const popupRef = useRef<MapLibrePopup>(null);
   const popoverId = useId();
   const [hoveredPlaceId, setHoveredPlaceId] = useState<string | null>(null);
@@ -81,12 +104,37 @@ export default function PlacesMap({
     const map = mapRef.current;
     if (!map || !isReady || !focusRequest) return;
 
+    const padding = getPadding(map, focusRequest.isSidebarOpen);
     map.easeTo({
       center: [focusRequest.location.longitude, focusRequest.location.latitude],
-      padding: getPadding(map, focusRequest.isSidebarOpen),
+      // Offset the target without retaining viewport padding in the camera state.
+      offset: [
+        (padding.left - padding.right) / 2,
+        (padding.top - padding.bottom) / 2,
+      ],
       duration: 650,
     });
   }, [focusRequest, isReady]);
+
+  useEffect(() => {
+    const map = mapRef.current;
+    if (!map || !isReady || !viewState) return;
+
+    if (areMapViewsEqual(getMapView(map), viewState)) return;
+
+    isRestoringView.current = true;
+    try {
+      map.jumpTo({
+        center: [viewState.longitude, viewState.latitude],
+        zoom: viewState.zoom,
+        bearing: viewState.bearing,
+        pitch: viewState.pitch,
+        padding: { top: 0, right: 0, bottom: 0, left: 0 },
+      });
+    } finally {
+      isRestoringView.current = false;
+    }
+  }, [viewState, isReady]);
 
   useEffect(() => {
     const popup = popupRef.current;
@@ -137,7 +185,10 @@ export default function PlacesMap({
       <Map
         key={attempt}
         ref={mapRef}
-        initialViewState={{ longitude: 37.6, latitude: 55.75, zoom: 10 }}
+        initialViewState={viewState ?? DEFAULT_MAP_VIEW}
+        minZoom={0}
+        maxZoom={MAX_MAP_ZOOM}
+        maxPitch={MAX_MAP_PITCH}
         mapStyle="https://tiles.openfreemap.org/styles/liberty"
         style={{ width: '100%', height: '100%' }}
         locale={{
@@ -146,7 +197,14 @@ export default function PlacesMap({
         }}
         onLoad={() => {
           setIsReady(true);
-          showAllPlaces();
+          if (!viewState && places.length) {
+            showAllPlaces();
+          } else if (mapRef.current) {
+            onViewStateChange(getMapView(mapRef.current));
+          }
+        }}
+        onMoveEnd={(event) => {
+          if (!isRestoringView.current) onViewStateChange(event.viewState);
         }}
         onError={() => setHasMapError(true)}
       >

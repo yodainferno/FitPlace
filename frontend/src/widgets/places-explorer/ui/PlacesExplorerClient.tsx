@@ -19,8 +19,10 @@ import {
   type PublishedPlace,
 } from '@/src/entities/place';
 import { IconButton } from '@/src/shared/ui/IconButton';
-import { DEFAULT_PLACE_FILTERS, filterPlaces } from '../model/place-filters';
+import { filterPlaces } from '../model/place-filters';
 import type { MapFocusRequest } from '../model/map-focus-request';
+import { usePlaceFilters } from '../model/usePlaceFilters';
+import { usePlaceMapView } from '../model/usePlaceMapView';
 import { PlaceFilters } from './PlaceFilters';
 import { PlaceDetailsDialog } from './PlaceDetailsDialog';
 
@@ -46,12 +48,14 @@ export function PlacesExplorerClient({
   hasLoadError = false,
 }: PlacesExplorerClientProps) {
   const router = useRouter();
+
   const [isRefreshing, startTransition] = useTransition();
   const [selectedPlaceId, setSelectedPlaceId] = useState<string | null>(null);
   const [mapFocusRequest, setMapFocusRequest] =
     useState<MapFocusRequest | null>(null);
   const [isSidebarOpen, setIsSidebarOpen] = useState(true);
-  const [filters, setFilters] = useState(DEFAULT_PLACE_FILTERS);
+
+  const { mapView, setMapView } = usePlaceMapView();
 
   const categories = useMemo(
     () =>
@@ -66,6 +70,7 @@ export function PlacesExplorerClient({
       ),
     [places],
   );
+  const { filters, setFilters, resetFilters } = usePlaceFilters(categories);
   const filteredPlaces = useMemo(
     () => filterPlaces(places, filters),
     [places, filters],
@@ -100,6 +105,8 @@ export function PlacesExplorerClient({
         onClickPlace={openPlace}
         isSidebarOpen={isSidebarOpen}
         focusRequest={mapFocusRequest}
+        viewState={mapView}
+        onViewStateChange={setMapView}
       />
       {isSidebarOpen ? (
         <aside
@@ -141,7 +148,7 @@ export function PlacesExplorerClient({
             <IconButton
               label="Сбросить фильтры"
               disabled={!hasFilters}
-              onClick={() => setFilters(DEFAULT_PLACE_FILTERS)}
+              onClick={resetFilters}
             >
               <RotateCcw size={16} aria-hidden="true" />
             </IconButton>
@@ -186,7 +193,7 @@ export function PlacesExplorerClient({
                   <button
                     type="button"
                     className="border-0 bg-transparent py-1.25 text-[13px] text-primary underline underline-offset-3 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary"
-                    onClick={() => setFilters(DEFAULT_PLACE_FILTERS)}
+                    onClick={resetFilters}
                   >
                     Сбросить фильтры
                   </button>

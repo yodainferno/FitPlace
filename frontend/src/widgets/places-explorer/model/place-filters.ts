@@ -1,8 +1,10 @@
+import { z } from 'zod';
 import {
   PLACE_RECOMMENDATION_LEVELS,
-  type PlaceRecommendation,
+  PlaceRecommendation,
   type PublishedPlace,
 } from '@/src/entities/place';
+import { parseQueryArray } from '@/src/shared/lib';
 
 export type PlaceFilters = {
   query: string;
@@ -15,6 +17,51 @@ export const DEFAULT_PLACE_FILTERS: PlaceFilters = {
   category: '',
   recommendations: PLACE_RECOMMENDATION_LEVELS,
 };
+
+const recommendationParamSchema = z
+  .string()
+  .regex(/^\d+$/)
+  .transform(Number)
+  .pipe(z.enum(PlaceRecommendation));
+
+export function readRecommendations(
+  raw: string | null,
+): PlaceFilters['recommendations'] {
+  return parseQueryArray(
+    raw,
+    recommendationParamSchema,
+    DEFAULT_PLACE_FILTERS.recommendations,
+  );
+}
+
+export function readPlaceFilters(
+  params: Pick<URLSearchParams, 'get'>,
+  categories: readonly string[],
+): PlaceFilters {
+  const category = params.get('category') ?? '';
+
+  return {
+    query: params.get('query') ?? DEFAULT_PLACE_FILTERS.query,
+    category: categories.includes(category) ? category : '',
+    recommendations: readRecommendations(params.get('recommendations')),
+  };
+}
+
+export function getPlaceFilterParams(
+  filters: PlaceFilters,
+): Record<string, string | null> {
+  const allRecommendations = PLACE_RECOMMENDATION_LEVELS.every((level) =>
+    filters.recommendations.includes(level),
+  );
+
+  return {
+    query: filters.query || null,
+    category: filters.category || null,
+    recommendations: allRecommendations
+      ? null
+      : [...filters.recommendations].sort((a, b) => a - b).join('_'),
+  };
+}
 
 export function filterPlaces(
   places: PublishedPlace[],
